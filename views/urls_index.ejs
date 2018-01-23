@@ -1,0 +1,18 @@
+// DISPLAY ALL THE URLS and THEIR SHORTENED FORMS
+//WILL RECEIVE URL DATA FROM EXPRESS_SERVER.JS
+
+
+
+
+
+<html lang='en'>
+<head>
+  <title>tinyApp</title>
+</head>
+
+<body><% for (var key in urls){ %>
+      <li><%=key%></li> - <li><%=urls[key]%></li>
+      <%} %>
+</body>
+
+</html>
