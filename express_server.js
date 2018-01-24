@@ -28,37 +28,25 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
- let longURLKeyValue = req.body
- let longURL = longURLKeyValue['longURL']
- console.log("trying to get value " + longURL)
- let shortURL = generateRandomString()
-
-
- console.log(" ->randomized string---> " + shortURL)
- //console.log(longURL)
- urlDatabase[shortURL] = longURL
- //console.log(req.body);
- console.log(urlDatabase)
-  //{ longURL: 'https://www.pinterest.ca' }
-  // debug statement to see POST parameters
+ let longURLKeyValue = req.body;
+ let longURL = longURLKeyValue['longURL'];
+ console.log("trying to get value " + longURL);
+ let shortURL = generateRandomString();
+ urlDatabase[shortURL] = longURL;
+ console.log(urlDatabase);
  res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
 
-app.get("/u/:shortURL", (req, res) => { //<-------------- check line BELOW
- let longURL = {shortUrl: req.params.id}
+app.get("/u/:shortURL", (req, res) => {
+ // let longURL = {shortUrl: req.params.id}
  res.redirect(longURL);
 });
 
 app.get("/urls/:id", (req, res) => {
- let templateVars = { shortURL: req.params.id };
+ let templateVars = { shortURL: req.params.id, longURL : req.params};
  res.render("urls_show", templateVars);
 });
-
-
-
-
-
 
 app.get("/urls", (req, res) => {
  let templateVars = { urls: urlDatabase };
