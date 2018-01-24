@@ -9,9 +9,11 @@
 </head>
 
 <body><li><%=shortURL%></li> - <li><%=longURL%></li>
-  <form method="POST" action="/urls">
+  <form method="POST" action="/urls/<%=shortURL%>">
     <input type="text" placeholder="Do you need to edit <%=longURL%>?" size="100"/> <input type="submit" value="Update" />
+
   </form>
+
 
 </body>
 
