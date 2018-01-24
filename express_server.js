@@ -15,8 +15,8 @@ var urlDatabase = {
 
 
 function generateRandomString() {
- var newURL = 6;//the size of string
- var charSet = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //from where to create
+ var newURL = 6;
+ var charSet = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  result= "";
     for( var i = 0; i < newURL; i++ )
        result += charSet[Math.floor(Math.random() * charSet.length)];
@@ -34,31 +34,31 @@ app.post("/urls", (req, res) => {
  let shortURL = generateRandomString();
  urlDatabase[shortURL] = longURL;
  console.log(urlDatabase);
-
  res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
-///// --------------- Check this OUTTTT
 app.get("/u/:shortURL", (req, res) => {
  let shortURL = req.params.shortURL;
  let longURL = urlDatabase[shortURL];
  res.redirect(longURL);
 });
-//////////////////////---------- ___________________
+
 
 app.get("/urls/:id", (req, res) => {
  let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id]};
  res.render("urls_show", templateVars);
 });
-app.post("/urls/:id/delete", (req, res) => {
-  // after deleting redirect to urls_index page'/urls'
-
-})
 
 app.get("/urls", (req, res) => {
  let templateVars = { urls: urlDatabase };
+ console.log(templateVars)
  res.render("urls_index", templateVars);
 });
+app.post("/urls/:id/delete", (req, res) => {
+  let shortURL = req.params.id;
+  delete urlDatabase[shortURL];
+  res.redirect("/urls")
+})
 
 app.get("/", (req, res) => {
  res.end("Hello!");
