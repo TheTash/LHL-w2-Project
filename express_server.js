@@ -5,16 +5,17 @@ var bodyParser = require('body-parser');
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "9sm5xK": "http://www.google.com",
+
+  generateRandomString : function(length, chars) {
+    var result = '';
+    for (var i = length; i > 0; i--){
+      return result;
+    }
+  }, //generateRandomString(6,'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 };
 
-function generateRandomString(length, chars) {
-  var result = '';
-  for (var i = length; i > 0; i--){
-    return result;
-  }
-}
-var rstring = generateRandomString(6,'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
 
 app.set('view engine', 'ejs');
 
