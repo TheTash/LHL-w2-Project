@@ -11,9 +11,13 @@
 </head>
 <h1>ATM, This is Your list of URLS You Have SHORTENED</h1>
 
-<body><% for (var key in urls){ %>
-      <li><%=key%></li><li><%=urls[key]%></li>
+<body>
+<% for (var key in urls){ %>
+      <li><%=key%></li><li><%=urls[key]%><form method="POST" action="urls/<%=key%>/delete"><input type='submit' value='Delete' /></form></li>
       <%} %>
+
+
+
 </body>
 
 </html>
