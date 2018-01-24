@@ -1,55 +1,81 @@
-var express = require('express');
+var express = require("express");
 var app = express();
-var PORT = process.env.PORT || 8080;
-var bodyParser = require('body-parser');
+var PORT = process.env.PORT || 8080; // default port 8080
+
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.set("view engine", "ejs")
 
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com",
-
-
-};
-var generateRandomShortURL = function(length, chars) {
-  var result = '';
-  for (var i = length; i > 0; i--){
-    return result += chars[Math.floor(Math.random() * chars.length)];
-  }
+ "b2xVn2": "http://www.lighthouselabs.ca",
+ "9sm5xK": "http://www.google.com"
 };
 
 
+function generateRandomString() {
+ var newURL = 6;//the size of string
+ var charSet = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //from where to create
+ result= "";
+    for( var i = 0; i < newURL; i++ )
+       result += charSet[Math.floor(Math.random() * charSet.length)];
+   return result;
+}
 
-
-app.set('view engine', 'ejs');
-
-
-app.listen(PORT, function(){
-  console.log('Example app listening on port', PORT, '!');
+app.get("/urls/new", (req, res) => {
+ res.render("urls_new");
 });
 
-app.use(bodyParser.urlencoded({extended:true}));
-
-app.get('/', function (req, res) {
-  res.end('Hello!');
-});
-
-app.get('/urls', function(req, res){
-  let templateVars = { urls: urlDatabase}
-  res.render('urls_index', templateVars);
-});
-
-app.get("/urls/new", function (req, res) {
-  res.render("urls_new");
-});
 app.post("/urls", (req, res) => {
-  var excessURL = ''
-  excessURL += generateRandomShortURL(req.body);
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
-});
-app.get('/urls/:id', function(req, res) {
-  let templateVars = { shortUrl: req.params.id, longUrl : urlDatabase[req.params.id]};
-  res.render("urls_shows", templateVars);
+ let longURLKeyValue = req.body
+ let longURL = longURLKeyValue['longURL']
+ console.log("trying to get value " + longURL)
+ let shortURL = generateRandomString()
+
+
+ console.log(" ->randomized string---> " + shortURL)
+ //console.log(longURL)
+ urlDatabase[shortURL] = longURL
+ //console.log(req.body);
+ console.log(urlDatabase)
+  //{ longURL: 'https://www.pinterest.ca' }
+  // debug statement to see POST parameters
+ res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
 
-app.get('/hello', function (req, res) {
-  res.end('<html><body>Hello <b>World</b></body></html>\n');
+
+app.get("/u/:shortURL", (req, res) => { //<-------------- check line BELOW
+ let longURL = {shortUrl: req.params.id}
+ res.redirect(longURL);
+});
+
+app.get("/urls/:id", (req, res) => {
+ let templateVars = { shortURL: req.params.id };
+ res.render("urls_show", templateVars);
+});
+
+
+
+
+
+
+app.get("/urls", (req, res) => {
+ let templateVars = { urls: urlDatabase };
+ res.render("urls_index", templateVars);
+});
+
+app.get("/", (req, res) => {
+ res.end("Hello!");
+});
+
+app.get("/urls.json", (req, res) => {
+ res.json(urlDatabase);
+});
+app.get("/hello", (req, res) => {
+ res.end("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+app.listen(PORT, () => {
+ console.log(`Example app listening on port ${PORT}!`);
 });
