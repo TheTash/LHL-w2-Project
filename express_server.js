@@ -1,15 +1,15 @@
 var express = require("express");
 var app = express();
-var PORT = process.env.PORT || 8080; // default port 8080
+var PORT = process.env.PORT || 3000; // default port 8080
 
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.set("view engine", "ejs")
+app.set("view engine", "ejs");
 
 var urlDatabase = {
- "b2xVn2": "http://www.lighthouselabs.ca",
+ "b2xVn2": "http://www.lighthouselabs",
  "9sm5xK": "http://www.google.com"
 };
 
@@ -30,11 +30,9 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
  let longURLKeyValue = req.body;
  let longURL = longURLKeyValue['longURL'];
- console.log("trying to get value " + longURL);
  let shortURL = generateRandomString();
  urlDatabase[shortURL] = longURL;
- console.log(urlDatabase);
- res.send("Ok");         // Respond with 'Ok' (we will replace this)
+ res.redirect("urls");
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -49,6 +47,7 @@ app.get("/urls/:id", (req, res) => {
  res.render("urls_show", templateVars);
 });
 
+
 app.get("/urls", (req, res) => {
  let templateVars = { urls: urlDatabase };
  console.log(templateVars)
@@ -57,7 +56,7 @@ app.get("/urls", (req, res) => {
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
   delete urlDatabase[shortURL];
-  res.redirect("/urls")
+  res.redirect("/urls");
 })
 
 app.get("/", (req, res) => {
@@ -74,3 +73,10 @@ app.get("/hello", (req, res) => {
 app.listen(PORT, () => {
  console.log(`Example app listening on port ${PORT}!`);
 });
+
+
+app.post("/urls/:id/", (req, res) => {
+  urlDatabase[req.params.id] = req.body['newURL'];
+  console.log(urlDatabase);
+  res.redirect('/urls')
+})
