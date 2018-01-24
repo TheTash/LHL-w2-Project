@@ -13,7 +13,8 @@
 
 <body>
 <% for (var key in urls){ %>
-      <li><%=key%></li><li><%=urls[key]%><form method="POST" action="urls/<%=key%>/delete"><input type='submit' value='Delete' /></form></li>
+      <li><%=key%></li><li><%=urls[key]%>
+      <a href="/urls/<%=key%>">Edit This</a> <form method="POST" action="urls/<%=key%>/delete"><input type='submit' value='Delete This' /></form></li>
       <%} %>
 
 
