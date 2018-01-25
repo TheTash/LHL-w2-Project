@@ -26,7 +26,8 @@ function generateRandomString() {
 }
 
 app.get("/urls/new", (req, res) => {
- res.render("urls_new");
+  let templateVars = {login: req.cookies['username']};
+ res.render("urls_new", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -51,7 +52,7 @@ app.post("/urls/:id/", (req, res) => {
 })
 
 app.get("/urls/:id", (req, res) => {
- let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], username: req.cookie['username']};
+ let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], login: req.cookies['username']};
  res.render("urls_show", templateVars);
 });
 
@@ -61,6 +62,7 @@ app.get("/urls", (req, res) => {
  console.log(templateVars)
  res.render("urls_index", templateVars);
 });
+
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
   delete urlDatabase[shortURL];
@@ -68,7 +70,7 @@ app.post("/urls/:id/delete", (req, res) => {
 })
 
 app.get("/", (req, res) => {
- res.end("Hello!");
+ res.end("Mahalo!");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -83,9 +85,15 @@ app.listen(PORT, () => {
 });
 
 // login creation
+
+
 app.post("/login", (req, res) => {
   let logIn = req.body['username'];
-  console.log(logIn)
-  res.cookie('username', logIn)
-  res.redirect('/urls')
+  res.cookie('username', logIn);
+  res.redirect('/urls');
 });
+app.post("/logout", (req, res) => {
+  let logout = req.body['username']
+  res.clearCookie('username', logout)
+  res.redirect('/urls');
+})
