@@ -81,7 +81,7 @@ app.get("/hello", (req, res) => {
 });
 
 app.listen(PORT, () => {
- console.log(`Example app listening on port ${PORT}!`);
+ console.log(`urlSpeeedDial is dialed in to port ${PORT}!`);
 });
 
 // login creation
@@ -96,4 +96,9 @@ app.post("/logout", (req, res) => {
   let logout = req.body['username']
   res.clearCookie('username', logout)
   res.redirect('/urls');
+})
+
+//registration page
+app.get("/register", (req,res) => {
+  res.render("user_reg");
 })
