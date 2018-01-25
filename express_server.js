@@ -61,7 +61,7 @@ app.post("/urls/:id/delete", (req, res) => {
 })
 
 app.get("/", (req, res) => {
- res.end("Hello!");
+ res.end("welcome to urlSpeeedDial!");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -72,12 +72,22 @@ app.get("/hello", (req, res) => {
 });
 
 app.listen(PORT, () => {
- console.log(`Example app listening on port ${PORT}!`);
+ console.log(`urlSpeeedDial dialing into port ${PORT}!`);
 });
 
+
+//params = collection of the url object
 // giving a new site an old key
-app.post("/urls/:id/", (req, res) => {
-  urlDatabase[req.params.id] = req.body['newURL'];
+app.post("/urls/", (req, res) => {
+  urlDatabase[req.params.s] = req.body['newURL'];
   console.log(urlDatabase);
   res.redirect('/urls')
 })
+
+// login creation
+app.post("/login", (req, res) => {
+  let logIn = req.body['username'];
+  console.log(logIn);
+  res.cookie('username', logIn);
+  res.redirect('/urls');
+});
