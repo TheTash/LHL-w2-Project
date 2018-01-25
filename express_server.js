@@ -10,7 +10,7 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 
-var urlDatabase = {
+const urlDatabase = {
  "b2xVn2": "http://www.lighthouselabs.com",
  "9sm5xK": "http://www.google.com"
 };
@@ -117,7 +117,13 @@ app.get("/register", (req,res) => {
 
 app.post("/register", (req, res) => {
   let newUser = req.body["email"]
+  let pass = req.body["pass"]
   console.log(newUser, 'email');
-  res.cookie('email');
+  console.log(pass, 'password')
+  res.cookie('email', newUser);
   res.render("user_reg");
 });
+
+app.post("/register", (req, res) => {
+
+})
