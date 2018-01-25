@@ -102,3 +102,7 @@ app.post("/logout", (req, res) => {
 app.get("/register", (req,res) => {
   res.render("user_reg");
 })
+app.post("/register", (req, res) => {
+  let newUser = req.body['email']
+  res.redirect('/', newUser)
+})
