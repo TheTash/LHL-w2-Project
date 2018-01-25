@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 3000; // default port 8080
 
 
@@ -56,7 +57,7 @@ app.get("/urls", (req, res) => {
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
   delete urlDatabase[shortURL];
-  res.redirect("/urls");
+  res.redirect("/urls/");
 })
 
 app.get("/", (req, res) => {
@@ -74,7 +75,7 @@ app.listen(PORT, () => {
  console.log(`Example app listening on port ${PORT}!`);
 });
 
-
+// giving a new site an old key
 app.post("/urls/:id/", (req, res) => {
   urlDatabase[req.params.id] = req.body['newURL'];
   console.log(urlDatabase);
