@@ -108,22 +108,29 @@ app.post("/logout", (req, res) => {
   let logout = req.body['username']
   res.clearCookie('username', logout)
   res.redirect('/urls');
-})
+});
 
 //registration page
 app.get("/register", (req,res) => {
   res.render("user_reg");
-})
-
-app.post("/register", (req, res) => {
-  let newUser = req.body["email"]
-  let pass = req.body["pass"]
-  console.log(newUser, 'email');
-  console.log(pass, 'password')
-  res.cookie('email', newUser);
-  res.render("user_reg");
 });
 
-app.post("/register", (req, res) => {
+// app.post("/register", (req, res) => {
+//   let newUser = req.body["email"];
+//   let pass = req.body["pass"];
+//
+//   res.cookie('email', newUser);
+//   res.render("user_reg");
+// });
 
-})
+app.post("/register", (req, res) => {
+  let newID = generateRandomString();
+  users[newID] = {
+    id: newID,
+    email: req.body['email'],
+    password: req.body['pass']
+  };
+  res.cookie(users);
+  console.log(users);
+  res.redirect("/register");
+});
