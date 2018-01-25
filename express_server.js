@@ -1,16 +1,15 @@
-const express = require("express");
-const app = express();
-const cookieParser = require('cookie-parser');
-const PORT = process.env.PORT || 3000; // default port 8080
+var express = require("express");
+var app = express();
+var PORT = process.env.PORT || 3000; // default port 8080
 
-
+var cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 
 var urlDatabase = {
- "b2xVn2": "http://www.lighthouselabs",
+ "b2xVn2": "http://www.lighthouselabs.com",
  "9sm5xK": "http://www.google.com"
 };
 
@@ -18,7 +17,7 @@ var urlDatabase = {
 function generateRandomString() {
  var newURL = 6;
  var charSet = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
- result= "";
+ var result= "";
     for( var i = 0; i < newURL; i++ )
        result += charSet[Math.floor(Math.random() * charSet.length)];
    return result;
@@ -40,8 +39,14 @@ app.get("/u/:shortURL", (req, res) => {
  let shortURL = req.params.shortURL;
  let longURL = urlDatabase[shortURL];
  res.redirect(longURL);
+ console.log(longURL)
 });
 
+app.post("/urls/:id/", (req, res) => {
+  urlDatabase[req.params.id] = req.body['newURL'];
+  console.log(urlDatabase);
+  res.redirect('/urls')
+})
 
 app.get("/urls/:id", (req, res) => {
  let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id]};
@@ -50,18 +55,18 @@ app.get("/urls/:id", (req, res) => {
 
 
 app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase };
+ let templateVars = { urls: urlDatabase, loginName: 'signIn' };
  console.log(templateVars)
  res.render("urls_index", templateVars);
 });
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
   delete urlDatabase[shortURL];
-  res.redirect("/urls/");
+  res.redirect("/urls");
 })
 
 app.get("/", (req, res) => {
- res.end("welcome to urlSpeeedDial!");
+ res.end("Hello!");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -72,22 +77,21 @@ app.get("/hello", (req, res) => {
 });
 
 app.listen(PORT, () => {
- console.log(`urlSpeeedDial dialing into port ${PORT}!`);
+ console.log(`Example app listening on port ${PORT}!`);
 });
 
-
-//params = collection of the url object
-// giving a new site an old key
-app.post("/urls/", (req, res) => {
-  urlDatabase[req.params.s] = req.body['newURL'];
-  console.log(urlDatabase);
-  res.redirect('/urls')
-})
-
 // login creation
+
+var loggedIn= {};
+
 app.post("/login", (req, res) => {
-  let logIn = req.body['username'];
-  console.log(logIn);
-  res.cookie('username', logIn);
-  res.redirect('/urls');
+  if(req.body.username !== null){
+  res.cookie('username', req.body.username);
+  let logInName = req.body.username;
+  loggedIn['UserID'] = logInName;
+  console.log(loggedIn);
+  res.redirect("/urls");
+  } else {
+    res.clearCookie('name')
+  }
 });
