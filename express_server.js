@@ -2,11 +2,13 @@ var express = require("express");
 var app = express();
 var PORT = process.env.PORT || 3000; // default port 8080
 
-var cookieParser = require("cookie-parser")
+var cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.set("view engine", "ejs");
+
 
 var urlDatabase = {
  "b2xVn2": "http://www.lighthouselabs.com",
@@ -49,13 +51,13 @@ app.post("/urls/:id/", (req, res) => {
 })
 
 app.get("/urls/:id", (req, res) => {
- let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id]};
+ let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], username: req.cookie['username']};
  res.render("urls_show", templateVars);
 });
 
 
 app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase, loginName: 'signIn' };
+ let templateVars = { urls: urlDatabase, login: req.cookies['username'] };
  console.log(templateVars)
  res.render("urls_index", templateVars);
 });
@@ -81,17 +83,9 @@ app.listen(PORT, () => {
 });
 
 // login creation
-
-var loggedIn= {};
-
 app.post("/login", (req, res) => {
-  if(req.body.username !== null){
-  res.cookie('username', req.body.username);
-  let logInName = req.body.username;
-  loggedIn['UserID'] = logInName;
-  console.log(loggedIn);
-  res.redirect("/urls");
-  } else {
-    res.clearCookie('name')
-  }
+  let logIn = req.body['username'];
+  console.log(logIn)
+  res.cookie('username', logIn)
+  res.redirect('/urls')
 });
