@@ -1,0 +1,23 @@
+<html lang='en'>
+<head>
+  <title>urlSpeeedDial</title>
+  <p>
+
+  </p>urlSpeeedDial, Log in!</p>
+
+</head>
+
+<body>
+  <% if (!login){ %>
+    <form method="POST" action="/login">
+    <input type="submit" value="Login" />
+    <input type="text" name="username" />
+    <input type="text" name="password" />
+    </form>
+  <%} else{ %>
+    <form method="POST" action="/logout">
+    <input type="submit" value="Logout" />
+    </form>
+  <%}%>
+</body>
+</html>

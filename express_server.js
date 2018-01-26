@@ -1,9 +1,11 @@
-var express = require("express");
-var app = express();
-var PORT = process.env.PORT || 3000; // default port 8080
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 3000; // default port 8080
 
-var cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
+
 const bodyParser = require("body-parser");
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
@@ -36,11 +38,12 @@ function generateRandomString() {
        result += charSet[Math.floor(Math.random() * charSet.length)];
    return result;
 }
-
+/*
 function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
+*/
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {login: req.cookies['username']};
@@ -68,14 +71,14 @@ app.post("/urls/:id/", (req, res) => {
   res.redirect('/urls')
 })
 
-app.get("/urls/:id", (req, res) => { ///////////////<<<< ==============
- let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], login: req.cookies['username']};
+app.get("/urls/:id", (req, res) => {
+ let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], login: req.cookies['username']};//<<<===
  res.render("urls_show", templateVars);
 });
 
 
 app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase, login: req.cookies['username'] }; /// <============
+ let templateVars = { urls: urlDatabase, login: req.cookies['username'] };//<====
  console.log(templateVars)
  res.render("urls_index", templateVars);
 });
@@ -102,15 +105,17 @@ app.listen(PORT, () => {
 });
 
 // login creation
-
+app.get("/login", (req, res) =>{
+  res.render("/urls_login.ejs");
+})
 
 app.post("/login", (req, res) => {
   let logIn = req.body['username'];
-  res.cookie('username', logIn);
+  res.cookie('username', logIn); //<====
   res.redirect('/urls');
 });
 app.post("/logout", (req, res) => {
-  let logout = req.body['username']
+  let logout = req.body['username'] //<====
   res.clearCookie('username', logout)
   res.redirect('/urls');
 });
@@ -120,13 +125,6 @@ app.get("/register", (req,res) => {
   res.render("user_reg");
 });
 
-// app.post("/register", (req, res) => {
-//   let newUser = req.body["email"];
-//   let pass = req.body["pass"];
-//
-//   res.cookie('email', newUser);
-//   res.render("user_reg");
-// });
 
 app.post("/register", (req, res) => {
 
@@ -148,3 +146,7 @@ res.cookie(users);
 console.log(users);
 res.redirect("/urls");
 });
+
+// cookies get doen in registration
+// generateRandomString = res.cookie = newID
+//wrt logIn, userID(the cookies) is from usersobject 
