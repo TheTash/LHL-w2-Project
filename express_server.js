@@ -37,6 +37,11 @@ function generateRandomString() {
    return result;
 }
 
+function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
 app.get("/urls/new", (req, res) => {
   let templateVars = {login: req.cookies['username']};
  res.render("urls_new", templateVars);
@@ -124,13 +129,22 @@ app.get("/register", (req,res) => {
 // });
 
 app.post("/register", (req, res) => {
-  let newID = generateRandomString();
-  users[newID] = {
-    id: newID,
-    email: req.body['email'],
-    password: req.body['pass']
-  };
-  res.cookie(users);
-  console.log(users);
-  res.redirect("/register");
+
+if(!req.body.email || !req.body.pass){
+  res.status(404).send('Not found');
+}
+for (var userKey in users){
+if(req.body['email'] == users[userKey]['email']){
+  res.status(404).send("username and password don't match, friend.");
+}
+}
+let newID = generateRandomString();
+users[newID] = {
+  id: newID,
+  email: req.body['email'],
+  password: req.body['pass']
+};
+res.cookie(users);
+console.log(users);
+res.redirect("/urls");
 });
