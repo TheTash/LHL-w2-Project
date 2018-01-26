@@ -68,14 +68,14 @@ app.post("/urls/:id/", (req, res) => {
   res.redirect('/urls')
 })
 
-app.get("/urls/:id", (req, res) => {
+app.get("/urls/:id", (req, res) => { ///////////////<<<< ==============
  let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], login: req.cookies['username']};
  res.render("urls_show", templateVars);
 });
 
 
 app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase, login: req.cookies['username'] };
+ let templateVars = { urls: urlDatabase, login: req.cookies['username'] }; /// <============
  console.log(templateVars)
  res.render("urls_index", templateVars);
 });
