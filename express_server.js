@@ -46,7 +46,7 @@ function validateEmail(email) {
 */
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {login: req.cookies['id']};
+  let templateVars = {login: req.cookies["user_id"]};
  res.render("urls_new", templateVars);
 });
 
@@ -79,7 +79,7 @@ app.get("/urls/:id", (req, res) => {
 
 app.get("/urls", (req, res) => {
  let templateVars = { urls: urlDatabase, login: req.cookies['username'] };//<====
- console.log(templateVars)
+
  res.render("urls_index", templateVars);
 });
 
@@ -142,8 +142,8 @@ users[newID] = {
   email: req.body['email'],
   password: req.body['pass']
 };
-res.cookie(users[newID], newID);  /// WHERE THE MAGIC HAPPENS
-console.log(users);
+res.cookie("user_id", newID);  /// WHERE THE MAGIC HAPPENS "users_id stores value of newID"
+
 res.redirect("/urls");
 });
 
