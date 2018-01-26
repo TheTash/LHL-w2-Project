@@ -46,7 +46,7 @@ function validateEmail(email) {
 */
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {login: req.cookies['username']};
+  let templateVars = {login: req.cookies['id']};
  res.render("urls_new", templateVars);
 });
 
@@ -142,11 +142,11 @@ users[newID] = {
   email: req.body['email'],
   password: req.body['pass']
 };
-res.cookie(users);
+res.cookie(users[newID], newID);  /// WHERE THE MAGIC HAPPENS
 console.log(users);
 res.redirect("/urls");
 });
 
 // cookies get doen in registration
 // generateRandomString = res.cookie = newID
-//wrt logIn, userID(the cookies) is from usersobject 
+//wrt logIn, userID is from usersobject
