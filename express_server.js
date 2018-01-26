@@ -46,7 +46,8 @@ function validateEmail(email) {
 */
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {login: req.cookies["user_id"]};
+  let templateVars = {login: res.cookie["user_id"]};
+
  res.render("urls_new", templateVars);
 });
 
