@@ -1,13 +1,13 @@
 <header>
   <h1>tinyApp Project</h1>
-<% if (!login){ %>
+<% if (!user){ %>
   <form method="POST" action="/login">
   <input type="submit" value="Login" />
   <input type="text" name="username"/>
   </form>
   <a href="/register">Are you new, here? Come Join Us!</a>
 <%} else { %>
-  <h>Hi, <%=login %></h>
+  <h>Hi, <%=user.email%>! welcome back</h>
   <form method="POST" action="/logout">
   <input type="submit" value="Logout" />
   </form>

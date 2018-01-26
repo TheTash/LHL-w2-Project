@@ -46,7 +46,8 @@ function validateEmail(email) {
 */
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {login: res.cookie["user_id"]};
+  let templateVars = {user: users.res.cookie["user_id"]};
+  console.log(user);
 
  res.render("urls_new", templateVars);
 });
@@ -73,14 +74,14 @@ app.post("/urls/:id/", (req, res) => {
 })
 
 app.get("/urls/:id", (req, res) => {
- let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], login: req.cookies['username']};//<<<===
+ let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id],  user: users[req.cookies['user_id']]};//<<<===
  res.render("urls_show", templateVars);
 });
 
 
 app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase, login: req.cookies['username'] };//<====
-
+ let templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']] };
+console.log(templateVars);
  res.render("urls_index", templateVars);
 });
 
@@ -116,8 +117,7 @@ app.post("/login", (req, res) => {
   res.redirect('/urls');
 });
 app.post("/logout", (req, res) => {
-  let logout = req.body['username'] //<====
-  res.clearCookie('username', logout)
+  res.clearCookie('user_id')
   res.redirect('/urls');
 });
 
@@ -133,7 +133,7 @@ if(!req.body.email || !req.body.pass){
   res.status(404).send('Not found');
 }
 for (var userKey in users){
-if(req.body['email'] == users[userKey]['email']){
+if(req.body['email'] == users[userKey]['email']) {
   res.status(404).send("username and password don't match, friend.");
 }
 }
