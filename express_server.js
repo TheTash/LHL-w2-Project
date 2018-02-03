@@ -38,16 +38,12 @@ function generateRandomString() {
        result += charSet[Math.floor(Math.random() * charSet.length)];
    return result;
 }
-/*
-function validateEmail(email) {
-    var re = /\S+@\S+\.\S+/;
-    return re.test(email);
-}
-*/
+
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {user: users[res.cookie["user_id"]]};
   console.log(templateVars);
+  console.log(users);
  res.render("urls_new", templateVars);
 });
 
