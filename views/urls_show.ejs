@@ -2,8 +2,11 @@
 
 <html lang='en'>
 <head>
+  <%- include('./partials/_header')%>
   <title>urlSpeeedDial</title>
-  <p>Welcome to urlSpeeedDial!</p>
+
+  <p>Welcome to urlSpeeedDial, <%= user%>!</p>
+
 </head>
 
 <body><li><%=shortURL%></li><li><%=longURL%></li></body>

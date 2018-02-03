@@ -39,7 +39,6 @@ function generateRandomString() {
    return result;
 }
 
-
 app.get("/urls/new", (req, res) => {
   let templateVars = {user: users[res.cookie["user_id"]]};
   console.log(templateVars);
@@ -69,14 +68,15 @@ app.post("/urls/:id/", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
+
  let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], user: users[res.cookie["user_id"]]};//<<<===
+
  res.render("urls_show", templateVars);
 });
 
 
 app.get("/urls", (req, res) => {
  let templateVars = { urls: urlDatabase, user: users[res.cookie['user_id']]};//<====
-
  res.render("urls_index", templateVars);
 });
 
@@ -109,7 +109,7 @@ app.post("/login", (req, res) => {
   res.redirect('/urls');
 });
 app.post("/logout", (req, res) => {
-  res.clearCookie('user_id', logout)
+  res.clearCookie('user_id')
   res.redirect('/urls');
 });
 
@@ -125,7 +125,7 @@ if(!req.body.email || !req.body.pass){
   res.status(404).send('Not found');
 }
 for (var userKey in users){
-if(req.body['email'] == users[userKey]['email']){
+if(req.body['email'] == users[userKey]['email']) {
   res.status(404).send("username and password don't match, friend.");
 }
 }
