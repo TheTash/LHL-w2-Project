@@ -46,8 +46,8 @@ function validateEmail(email) {
 */
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {login: res.cookie["user_id"]};
-
+  let templateVars = {user: users[res.cookie["user_id"]]};
+  console.log(templateVars);
  res.render("urls_new", templateVars);
 });
 
@@ -70,16 +70,16 @@ app.post("/urls/:id/", (req, res) => {
   urlDatabase[req.params.id] = req.body['newURL'];
   console.log(urlDatabase);
   res.redirect('/urls')
-})
+});
 
 app.get("/urls/:id", (req, res) => {
- let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], login: req.cookies['username']};//<<<===
+ let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], user: users[res.cookie["user_id"]]};//<<<===
  res.render("urls_show", templateVars);
 });
 
 
 app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase, login: req.cookies['username'] };//<====
+ let templateVars = { urls: urlDatabase, user: users[res.cookie['user_id']]};//<====
 
  res.render("urls_index", templateVars);
 });
@@ -101,9 +101,6 @@ app.get("/hello", (req, res) => {
  res.end("<html><body>Hello <b>World</b></body></html>\n");
 });
 
-app.listen(PORT, () => {
- console.log(`urlSpeeedDial is dialed in to port ${PORT}!`);
-});
 
 // login creation
 app.get("/login", (req, res) =>{
@@ -111,13 +108,12 @@ app.get("/login", (req, res) =>{
 })
 
 app.post("/login", (req, res) => {
-  let logIn = req.body['username'];
-  res.cookie('username', logIn); //<====
+  let logIn = req.body['user_id'];
+  res.cookie('user_id', logIn); //<====
   res.redirect('/urls');
 });
 app.post("/logout", (req, res) => {
-  let logout = req.body['username'] //<====
-  res.clearCookie('username', logout)
+  res.clearCookie('user_id', logout)
   res.redirect('/urls');
 });
 
@@ -151,3 +147,8 @@ res.redirect("/urls");
 // cookies get doen in registration
 // generateRandomString = res.cookie = newID
 //wrt logIn, userID is from usersobject
+
+
+app.listen(PORT, () => {
+ console.log(`urlSpeeedDial is dialed in to port ${PORT}!`);
+});
