@@ -40,9 +40,8 @@ function generateRandomString() {
 }
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {user: users[res.cookie["user_id"]]};
+  let templateVars = {user: users[req.cookies["user_id"]]};
   console.log(templateVars);
-  console.log(users);
  res.render("urls_new", templateVars);
 });
 
@@ -58,25 +57,24 @@ app.get("/u/:shortURL", (req, res) => {
  let shortURL = req.params.shortURL;
  let longURL = urlDatabase[shortURL];
  res.redirect(longURL);
- console.log(longURL)
 });
 
 app.post("/urls/:id/", (req, res) => {
   urlDatabase[req.params.id] = req.body['newURL'];
-  console.log(urlDatabase);
   res.redirect('/urls')
 });
 
 app.get("/urls/:id", (req, res) => {
 
- let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], user: users[res.cookie["user_id"]]};//<<<===
+ let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], user: users[req.cookies["user_id"]]};//<<<===
 
  res.render("urls_show", templateVars);
 });
 
 
 app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase, user: users[res.cookie['user_id']]};//<====
+ let templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']]};//<====
+console.log(templateVars);
  res.render("urls_index", templateVars);
 });
 
@@ -120,8 +118,8 @@ app.get("/register", (req,res) => {
 
 
 app.post("/register", (req, res) => {
-
-if(!req.body.email || !req.body.pass){
+console.log(req.body.email);
+if(req.body.email === '' || req.body.password === ''){
   res.status(404).send('Not found');
 }
 for (var userKey in users){
@@ -133,10 +131,14 @@ let newID = generateRandomString();
 users[newID] = {
   id: newID,
   email: req.body['email'],
-  password: req.body['pass']
+  password: req.body['password']
 };
-res.cookie("user_id", newID);  /// WHERE THE MAGIC HAPPENS "users_id stores value of newID"
 
+console.log(users[newID]['email'], 'email');
+res.cookie("user_id", newID);
+console.log(newID);
+console.log(users[newID], 'after the cookie is created');
+console.log(users[newID]['id'], 'after cookie created in registration');
 res.redirect("/urls");
 });
 

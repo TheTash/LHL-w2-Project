@@ -8,38 +8,18 @@
   </form>
   <a href="/register">Are you new, here? Come Join Us!</a>
 <%} else { %>
-  <h>Hi, <%=user.email%>! welcome back</h>
+  <h>Hi, <%=user['email']%>, Welcome Back!</h>
   <form method="POST" action="/logout">
   <input type="submit" value="Logout" />
   </form>
 <% } %>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<body class="container">
-
-<head>
-  <% if (!user){ %>
-    <form method="POST" action="/login">
-    <input type="submit" value="Login" />
-    <input type="text" name="user_id"/>
-    </form>
-    <a href="/register">Are you new, here? Come Join Us!</a>
-  <%} else { %>
-    <h>Hi, <%=user['email'] %></h>
-    <form method="POST" action="/logout">
-    <input type="submit" value="Logout" />
-    </form>
-  <% } %>
-</head>
+</header>
 
 <main>
 <div class="row">
     <div class="col-sm-8">
         <div class="jumbotron">
             <h1>urlSpeeedDial</h1>
-
         </div>
     </div>
 
