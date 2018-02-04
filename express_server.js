@@ -74,7 +74,6 @@ app.get("/urls/:id", (req, res) => {
 
 app.get("/urls", (req, res) => {
  let templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']]};//<====
-console.log(templateVars);
  res.render("urls_index", templateVars);
 });
 
@@ -98,14 +97,21 @@ app.get("/hello", (req, res) => {
 
 // login creation
 app.get("/login", (req, res) =>{
-  res.render("/urls_login.ejs");
+  res.render("urls_login");
 })
 
 app.post("/login", (req, res) => {
-  let logIn = req.body['user_id'];
-  res.cookie('user_id', logIn); //<====
+  let logIn = req.body.email;
+  for (var userKey in users){
+  if( logIn === users[userKey]['email']) {
+    req.cookies['user-id'] = users[userKey]['id'];
+    console.log('Welcome, ', req.body);
+  }
+}
+  res.cookie('user_id', logIn); //<====  res.redirect('/urls');
   res.redirect('/urls');
 });
+
 app.post("/logout", (req, res) => {
   res.clearCookie('user_id')
   res.redirect('/urls');
@@ -118,27 +124,23 @@ app.get("/register", (req,res) => {
 
 
 app.post("/register", (req, res) => {
-console.log(req.body.email);
 if(req.body.email === '' || req.body.password === ''){
   res.status(404).send('Not found');
 }
 for (var userKey in users){
-if(req.body['email'] == users[userKey]['email']) {
+if(req.body['email'] === users[userKey]['email']) {
   res.status(404).send("username and password don't match, friend.");
 }
 }
 let newID = generateRandomString();
 users[newID] = {
   id: newID,
-  email: req.body['email'],
-  password: req.body['password']
+  email: req.body.email,
+  password: req.body.password
 };
 
-console.log(users[newID]['email'], 'email');
-res.cookie("user_id", newID);
-console.log(newID);
-console.log(users[newID], 'after the cookie is created');
-console.log(users[newID]['id'], 'after cookie created in registration');
+res.cookie("user_id", id);
+console.log(users);
 res.redirect("/urls");
 });
 

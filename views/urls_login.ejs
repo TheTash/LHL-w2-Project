@@ -9,17 +9,19 @@
 
 <body>
   <h1>Welcome</h1>
-  <% if (!login){ %>
     <form method="POST" action="/login">
-    <input type="submit" value="Login" />
-    <input type="text" name="user_id" />
-    <input type="text" name="password" />
+      <h4>Enter Your Login email, please.
+        <input type="text" placeholder="user@example.com" name="email" />
+      </h4>
+      <h4>Enter Your Password, Please.
+        <input type="text" placeholder="purple-monkey-dinosaur" name="password" />
+      </h4>
+      <div>
+          <input type="submit" value="Login" />
+      </div>
     </form>
-  <%} else{ %>
-    <form method="POST" action="/logout">
-    <input type="submit" value="Logout" />
-    </form>
-  <% } %>
-  <a href="/urls/">Any other sites to shorten?</a>
+
+  <h3><a href="/urls/">Any other sites to shorten?</a></h3>
+  <h3><a href="/register">Do you not have an account already Registered?</a></h3>
 </body>
 </html>
