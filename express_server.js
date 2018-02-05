@@ -42,8 +42,10 @@ function generateRandomString() {
 app.get("/urls/new", (req, res) => {
   let templateVars = {user: users[req.cookies["user_id"]]};
   console.log(templateVars);
- res.render("urls_new", templateVars);
+  res.render("urls_new", templateVars);
+
 });
+
 
 app.post("/urls", (req, res) => {
  let longURLKeyValue = req.body;
@@ -99,17 +101,22 @@ app.get("/login", (req, res) =>{
 });
 
 app.post("/login", (req, res) => {
+  let user;
   let logIn = req.body.email;
   let password = req.body.password;
-  for (var userKey in users) {
-  if( logIn == users[userKey]['email'] && password == users[userKey]['password']) {
-    console.log(users[userKey]['id'], 'this is req.body.id');
-    console.log(users);
-    res.cookie('user_id', users[userKey]['id']);
-    console.log(req.cookies['user_id']);
-    console.log('Welcome, ', logIn);
+
+  for (let userKey in users ) {
+    if ( logIn === users[userKey]['email'] && password === users[userKey]['password']) {
+      user = users[userKey];
+    }
   }
-}
+  if (user) {
+    console.log(user);
+    res.cookie('user_id', user.id);
+
+  } else {
+    res.status(403).send("username or password don't match.");
+  }
 
   res.redirect('/urls');
 });
@@ -131,7 +138,7 @@ if(req.body.email === '' || req.body.password === ''){
 }
 for (var userKey in users){
   if(req.body['email'] === users[userKey]['email']) {
-    res.status(404).send("username and password don't match, friend.");
+    res.status(404).send("This username is taken, friend.");
   }
 }
 let newID = generateRandomString();
@@ -141,7 +148,7 @@ users[newID] = {
   password: req.body.password
 };
 
-res.cookie("user_id", id);
+res.cookie("user_id", newID);
 console.log(users);
 res.redirect("/urls");
 });
