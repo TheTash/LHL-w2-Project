@@ -65,9 +65,7 @@ app.post("/urls/:id/", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-
  let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], user: users[req.cookies["user_id"]]};//<<<===
-
  res.render("urls_show", templateVars);
 });
 
@@ -98,17 +96,21 @@ app.get("/hello", (req, res) => {
 // login creation
 app.get("/login", (req, res) =>{
   res.render("urls_login");
-})
+});
 
 app.post("/login", (req, res) => {
   let logIn = req.body.email;
-  for (var userKey in users){
-  if( logIn === users[userKey]['email']) {
-    req.cookies['user-id'] = users[userKey]['id'];
-    console.log('Welcome, ', req.body);
+  let password = req.body.password;
+  for (var userKey in users) {
+  if( logIn == users[userKey]['email'] && password == users[userKey]['password']) {
+    console.log(users[userKey]['id'], 'this is req.body.id');
+    console.log(users);
+    res.cookie('user_id', users[userKey]['id']);
+    console.log(req.cookies['user_id']);
+    console.log('Welcome, ', logIn);
   }
 }
-  res.cookie('user_id', logIn); //<====  res.redirect('/urls');
+
   res.redirect('/urls');
 });
 
@@ -128,9 +130,9 @@ if(req.body.email === '' || req.body.password === ''){
   res.status(404).send('Not found');
 }
 for (var userKey in users){
-if(req.body['email'] === users[userKey]['email']) {
-  res.status(404).send("username and password don't match, friend.");
-}
+  if(req.body['email'] === users[userKey]['email']) {
+    res.status(404).send("username and password don't match, friend.");
+  }
 }
 let newID = generateRandomString();
 users[newID] = {
