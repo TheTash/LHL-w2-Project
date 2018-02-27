@@ -40,11 +40,16 @@ function generateRandomString() {
 }
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {user: users[req.cookies["user_id"]]};
-  console.log(templateVars);
-  res.render("urls_new", templateVars);
 
-});
+  //console.log(users);
+
+  if (req.cookies["user_id"] === undefined){
+    res.status(403).render('login');
+  } else {
+    let templateVars = {user: users[req.cookies["user_id"]]};
+    res.render("urls_new", templateVars);
+    }
+  });
 
 
 app.post("/urls", (req, res) => {
@@ -111,7 +116,6 @@ app.post("/login", (req, res) => {
     }
   }
   if (user) {
-    console.log(user);
     res.cookie('user_id', user.id);
 
   } else {
@@ -153,7 +157,7 @@ console.log(users);
 res.redirect("/urls");
 });
 
-// cookies get doen in registration
+// cookies get done in registration
 // generateRandomString = res.cookie = newID
 //wrt logIn, userID is from usersobject
 
