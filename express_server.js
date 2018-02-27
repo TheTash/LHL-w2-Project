@@ -44,7 +44,7 @@ app.get("/urls/new", (req, res) => {
   //console.log(users);
 
   if (req.cookies["user_id"] === undefined){
-    res.status(403).render('login');
+    res.status(403).render('urls_login');
   } else {
     let templateVars = {user: users[req.cookies["user_id"]]};
     res.render("urls_new", templateVars);
