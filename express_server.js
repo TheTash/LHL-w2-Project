@@ -13,9 +13,15 @@ app.set("view engine", "ejs");
 
 
 const urlDatabase = {
- "b2xVn2": "http://www.lighthouselabs.com",
- "9sm5xK": "http://www.google.com"
+  "userRandomID": {
+    "b2xVn2": "http://www.lighthouselabs.com",
+    "9sm5xK": "http://www.google.com"
+  },
+  "user2RandomID": {
+   "9sm5xK": "http://www.google.com"
+  }
 };
+
 
 const users = {
   "userRandomID": {
@@ -39,6 +45,8 @@ function generateRandomString() {
    return result;
 }
 
+
+
 app.get("/urls/new", (req, res) => {
 
   //console.log(users);
@@ -51,14 +59,25 @@ app.get("/urls/new", (req, res) => {
     }
   });
 
+// --- app.get and app.post '/urls'
+app.get("/urls", (req, res) => {
+   let templateVars = {
+     urls: urlDatabase[req.cookies["user_id"]],
+     user: users[req.cookies['user_id']]};//<====
+
+   res.render("urls_index", templateVars);
+  });
+
 
 app.post("/urls", (req, res) => {
  let longURLKeyValue = req.body;
  let longURL = longURLKeyValue['longURL'];
  let shortURL = generateRandomString();
+
  urlDatabase[shortURL] = longURL;
  res.redirect("urls");
 });
+
 
 app.get("/u/:shortURL", (req, res) => {
  let shortURL = req.params.shortURL;
@@ -77,10 +96,6 @@ app.get("/urls/:id", (req, res) => {
 });
 
 
-app.get("/urls", (req, res) => {
- let templateVars = { urls: urlDatabase, user: users[req.cookies['user_id']]};//<====
- res.render("urls_index", templateVars);
-});
 
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
