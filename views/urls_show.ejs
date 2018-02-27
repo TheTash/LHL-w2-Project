@@ -5,13 +5,12 @@
   <%- include('./partials/_header')%>
   <title>urlSpeeedDial</title>
 
-  <p>Welcome to urlSpeeedDial, <%= user%>!</p>
 
 </head>
 
 <body><li><%=shortURL%></li><li><%=longURL%></li></body>
   <form method="POST" action="/urls/<%=shortURL%>">
-    <input type="text" name = "newURL" placeholder="Have you forgotten to add the 'http://' <%=longURL%>?" size="100"/>
+    <input type="text" name = "newURL" placeholder="<%=longURL%>" size="100"/>
      <input type="submit" value="Update" />
 
   </form>
