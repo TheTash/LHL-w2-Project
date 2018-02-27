@@ -87,12 +87,17 @@ app.get("/u/:shortURL", (req, res) => {
 
 
 app.post("/urls/:id/", (req, res) => {
-  urlDatabase[req.params.id] = req.body['newURL'];
+  urlDatabase[req.cookies["user_id"]][req.params.id] = req.body['newURL'];
   res.redirect('/urls')
 });
 
 app.get("/urls/:id", (req, res) => {
- let templateVars = { shortURL: req.params.id, longURL : urlDatabase[req.params.id], user: users[req.cookies["user_id"]]};//<<<===
+
+ let templateVars = {
+   shortURL: req.params.id,
+   longURL : urlDatabase[req.cookies["user_id"]][req.params.id], 
+   user: users[req.cookies["user_id"]]};
+
  res.render("urls_show", templateVars);
 });
 
